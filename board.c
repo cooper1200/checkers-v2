@@ -1,10 +1,10 @@
 
 #include "board.h"
 
-int initalize_game(char board[][ROW_MAX + 1], int current_player)
+int initalize_game(char board[][ROW_MAX +1][MESSAGE], int current_player)
 {
     int x_coordinate, y_coordinate;
-    char piece_colour;
+    char piece_colour[MESSAGE];
 
     current_player = PLAYER_WHITE;
 
@@ -14,17 +14,17 @@ int initalize_game(char board[][ROW_MAX + 1], int current_player)
         {
             if (y_coordinate < 3) // y_coordinate is less than 3 so dealing with white pieces
             {
-                piece_colour = 'w';
+                strcpy(piece_colour, "w");
                 update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
             else if ((y_coordinate > 2) && (y_coordinate < 5))
             {
-                piece_colour = ' '; //a space
+                strcpy(piece_colour, " ");
                 update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
             else // y_coordinate is 5 or more so dealing with black pieces
             {
-                piece_colour = 'b';
+                strcpy(piece_colour, "b");
                 update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
         }
@@ -32,10 +32,16 @@ int initalize_game(char board[][ROW_MAX + 1], int current_player)
     return current_player;
 }
 
-void update_board_array(char board[][ROW_MAX + 1], char place_character, int x_coordinate, int y_coordinate)
+void update_board_array(char board[][ROW_MAX +1][MESSAGE], char place_character[], int x_coordinate, int y_coordinate)
 {
-    board[x_coordinate][y_coordinate] = (((y_coordinate % 2 == 0) && (x_coordinate % 2 == 0)) ||
-                                         ((y_coordinate % 2 != 0) && (x_coordinate % 2 != 0))) ? place_character : INVALID_SQUARE;
+    if (((y_coordinate % 2 == 0) && (x_coordinate % 2 == 0)) || ((y_coordinate % 2 != 0) && (x_coordinate % 2 != 0)))
+    {
+        strcpy(board[x_coordinate][y_coordinate], place_character);
+    }
+    else
+    {
+        strcpy(board[x_coordinate][y_coordinate], INVALID_SQUARE);
+    }
 }
 
 void clear_screen(void)
@@ -43,10 +49,10 @@ void clear_screen(void)
     printf("\033c");
 }
 
-void draw_board(char board[][ROW_MAX + 1], int current_player)
+void draw_board(char board[][ROW_MAX +1][MESSAGE], int current_player)
 {
     int x_coordinate, y_coordinate;
-    char temp_array[COLUMN_MAX + 1][ROW_MAX + 1];
+    char temp_array[COLUMN_MAX + 1][ROW_MAX + 1][MESSAGE];
 
     if (current_player == 1)
     {
@@ -54,7 +60,7 @@ void draw_board(char board[][ROW_MAX + 1], int current_player)
         {
             for (x_coordinate = COLUMN_MAX; x_coordinate >= COLUMN_MIN; x_coordinate--)
             {
-                temp_array[x_coordinate][y_coordinate] = board[x_coordinate][y_coordinate];
+                strcpy(temp_array[x_coordinate][y_coordinate], board[x_coordinate][y_coordinate]);
             }
         }
     }
@@ -71,10 +77,10 @@ void draw_board(char board[][ROW_MAX + 1], int current_player)
             {
                 if (x_coordinate % 2 == 0)
                 {
-                    current_player ? printf(" %d *   %c   *********   %c   *********   %c   *********   %c   *********\n", y_coordinate,
+                    current_player ? printf(" %d *   %s   *********   %s   *********   %s   *********   %s   *********\n", y_coordinate,
                                      temp_array[7-0][7-y_coordinate], temp_array[7-2][7-y_coordinate],
                                      temp_array[7-4][7-y_coordinate], temp_array[7-6][7-y_coordinate]) :
-                             printf(" %d *   %c   *********   %c   *********   %c   *********   %c   *********\n", y_coordinate,
+                             printf(" %d *   %s   *********   %s   *********   %s   *********   %s   *********\n", y_coordinate,
                              board[0][y_coordinate], board[2][y_coordinate], board[4][y_coordinate], board[6][y_coordinate]);
                 }
                 else
@@ -86,10 +92,10 @@ void draw_board(char board[][ROW_MAX + 1], int current_player)
             {
                 if (x_coordinate % 2 == 0)
                 {
-                    current_player ? printf(" %d *********   %c   *********   %c   *********   %c   *********   %c   *\n",y_coordinate,
+                    current_player ? printf(" %d *********   %s   *********   %s   *********   %s   *********   %s   *\n",y_coordinate,
                                      temp_array[7-1][7-y_coordinate], temp_array[7-3][7-y_coordinate],
                                      temp_array[7-5][7-y_coordinate], temp_array[7-7][7-y_coordinate]) :
-                             printf(" %d *********   %c   *********   %c   *********   %c   *********   %c   *\n",y_coordinate,
+                             printf(" %d *********   %s   *********   %s   *********   %s   *********   %s   *\n",y_coordinate,
                              board[1][y_coordinate], board[3][y_coordinate], board[5][y_coordinate], board[7][y_coordinate]);
                 }
                 else
@@ -103,15 +109,15 @@ void draw_board(char board[][ROW_MAX + 1], int current_player)
     printf("       0        1       2      3       4       5       6       7    \n");
 }
 
-bool validate_piece(char board[][ROW_MAX + 1], int current_player, int x_coordinate, int y_coordinate)
+bool validate_piece(char board[][ROW_MAX +1][MESSAGE], int current_player, int x_coordinate, int y_coordinate)
 {
     if (current_player == PLAYER_WHITE)
     {
-        return ((board[x_coordinate][y_coordinate] == 'w') || (board[x_coordinate][y_coordinate] == 'W')) ? true : false;
+        return ((strcmp(board[x_coordinate][y_coordinate], "w") == 0) || (strcmp(board[x_coordinate][y_coordinate], "W") == 0)) ? true : false;
     }
     else
     {
-        return ((board[x_coordinate][y_coordinate] == 'b') || (board[x_coordinate][y_coordinate] == 'B')) ? true : false;
+        return ((strcmp(board[x_coordinate][y_coordinate], "b") == 0) || (strcmp(board[x_coordinate][y_coordinate], "B") == 0)) ? true : false;
     }
 }
 
@@ -121,12 +127,12 @@ bool off_board(int x_coordinate, int y_coordinate)
             ((y_coordinate >= ROW_MIN) && (y_coordinate <= ROW_MAX))) ? false : true;
 }
 
-bool valid_square(char board[][ROW_MAX + 1], int x_coordinate, int y_coordinate)
+bool valid_square(char board[][ROW_MAX +1][MESSAGE], int x_coordinate, int y_coordinate)
 {
-    return (board[x_coordinate][y_coordinate] = ' ') ? true : false;
+    return (board[x_coordinate][y_coordinate][MESSAGE] = ' ') ? true : false;
 }
 
-void get_coordinates(char board[][ROW_MAX + 1], bool run_before, int current_player, int *p_x, int *p_y)
+void get_coordinates(char board[][ROW_MAX +1][MESSAGE], bool run_before, int current_player, int *p_x, int *p_y)
 {
     //int x_coordinate_of_piece, y_coordinate_of_piece, x_coordinate_to_move_to, y_coordinate_to_move_to;
     char starting_phrase[] = "Whites turn::";

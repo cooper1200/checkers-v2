@@ -1,14 +1,14 @@
 #include "board.h"
 
-bool check_king(char board[][ROW_MAX + 1], int x_coordinate, int y_coordinate);
-bool calculate_move(char board[][ROW_MAX +1], int current_player, int piece_coordinate_x,
+bool check_king(char board[][ROW_MAX + 1][MESSAGE], int x_coordinate, int y_coordinate);
+bool calculate_move(char board[][ROW_MAX +1][MESSAGE], int current_player, int piece_coordinate_x,
                     int piece_coordinate_y, int move_coordinate_x, int move_coordinate_y);
-void move_1_square(char board[][ROW_MAX +1], char character, int piece_coordinate_x,
+void move_1_square(char board[][ROW_MAX +1][MESSAGE], char character[], int piece_coordinate_x,
                     int piece_coordinate_y, int move_coordinate_x, int move_coordinate_y, int current_player);
 int main()
 {
     enum player current_player = PLAYER_WHITE;
-    char board[COLUMN_MAX + 1][ROW_MAX + 1];
+    char board[COLUMN_MAX + 1][ROW_MAX + 1][MESSAGE];
     int x_coordinate_of_piece, y_coordinate_of_piece, x_coordinate_to_move_to, y_coordinate_to_move_to;
 
     current_player = initalize_game(board, current_player);
@@ -21,6 +21,10 @@ int main()
         {
             if (validate_piece(board, current_player, x_coordinate_of_piece, y_coordinate_of_piece) == true)
             {
+                current_player ? update_board_array(board, "\e[196;5;196m\e[38;5;196mb\e[0m", x_coordinate_of_piece, y_coordinate_of_piece) :
+                                 update_board_array(board, "\e[196;5;196m\e[38;5;196mw\e[0m", x_coordinate_of_piece, y_coordinate_of_piece);
+                clear_screen();
+                draw_board(board, current_player);
                 get_coordinates(board, true, current_player, &x_coordinate_to_move_to, &y_coordinate_to_move_to);
                 if (off_board(x_coordinate_to_move_to, y_coordinate_to_move_to) == false)
                 {
@@ -66,12 +70,12 @@ int main()
     return 0;
 }
 
-bool check_king(char board[][ROW_MAX + 1], int x_coordinate, int y_coordinate)
+bool check_king(char board[][ROW_MAX + 1][MESSAGE], int x_coordinate, int y_coordinate)
 {
-    return ((board[x_coordinate][y_coordinate] == 'W') || (board[x_coordinate][y_coordinate] == 'B')) ? true : false;
+    return 0;//((board[x_coordinate][y_coordinate] == 'W') || (board[x_coordinate][y_coordinate] == 'B')) ? true : false;
 }
 
-bool calculate_move(char board[][ROW_MAX +1], int current_player, int piece_coordinate_x,
+bool calculate_move(char board[][ROW_MAX +1][MESSAGE], int current_player, int piece_coordinate_x,
                     int piece_coordinate_y, int move_coordinate_x, int move_coordinate_y)
 {
     if (move_coordinate_y - piece_coordinate_y < 0)
@@ -81,8 +85,8 @@ bool calculate_move(char board[][ROW_MAX +1], int current_player, int piece_coor
     else if ((move_coordinate_y - piece_coordinate_y == 1) && ((move_coordinate_x - piece_coordinate_x == -1) ||
             (move_coordinate_x - piece_coordinate_x == 1)))
     {
-        current_player ? move_1_square(board,'b', piece_coordinate_x, piece_coordinate_y, move_coordinate_x,
-                                       move_coordinate_y, current_player) : move_1_square(board, 'w',piece_coordinate_x,
+        current_player ? move_1_square(board,"b", piece_coordinate_x, piece_coordinate_y, move_coordinate_x,
+                                       move_coordinate_y, current_player) : move_1_square(board, "w",piece_coordinate_x,
                                        piece_coordinate_y, move_coordinate_x, move_coordinate_y, current_player);
         return true;
     }
@@ -93,9 +97,9 @@ bool calculate_move(char board[][ROW_MAX +1], int current_player, int piece_coor
     }
 }
 
-void move_1_square(char board[][ROW_MAX +1], char character, int piece_coordinate_x,int piece_coordinate_y, int move_coordinate_x, int move_coordinate_y, int current_player)
+void move_1_square(char board[][ROW_MAX +1][MESSAGE], char character[], int piece_coordinate_x,int piece_coordinate_y, int move_coordinate_x, int move_coordinate_y, int current_player)
 {
-    update_board_array(board, ' ', piece_coordinate_x, piece_coordinate_y);
+    update_board_array(board, " ", piece_coordinate_x, piece_coordinate_y);
     update_board_array(board, character, move_coordinate_x, move_coordinate_y);
     clear_screen();
     draw_board(board, current_player);

@@ -9,7 +9,8 @@
 #define ROW_MAX 7
 #define COLUMN_MIN 0
 #define COLUMN_MAX 7
-#define INVALID_SQUARE '!'
+#define MESSAGE 32
+#define INVALID_SQUARE "!"
 #define QUIT 9
 
 enum player { PLAYER_WHITE = 0, PLAYER_BLACK = 1 };
@@ -18,14 +19,14 @@ enum player { PLAYER_WHITE = 0, PLAYER_BLACK = 1 };
  *initialise game: Sets up a new game.                                  *
  ************************************************************************/
 
-int initalize_game(char board[][ROW_MAX + 1], int current_player);
+int initalize_game(char board[][ROW_MAX +1][MESSAGE], int current_player);
 
 /************************************************************************
  * update board array: Updates the board array by putting the character *
  *                     passed to it at the position passed to it.       *
  ************************************************************************/
 
-void update_board_array(char board[][ROW_MAX + 1], char place_character, int x_cordinate, int y_coordinate);
+void update_board_array(char board[][ROW_MAX +1][MESSAGE], char place_character[], int x_cordinate, int y_coordinate);
 
 /************************************************************************
  * clear screen: Clears the screen so the board can be redrawn.         *
@@ -38,7 +39,7 @@ void clear_screen(void);
  *             place the pieces.                                        *
  ************************************************************************/
 
-void draw_board(char board[][ROW_MAX +1], int current_player);
+void draw_board(char board[][ROW_MAX +1][MESSAGE], int current_player);
 
 /************************************************************************
  * get co-ordinates: Gets the co-ordinates of the piece first time run  *
@@ -46,7 +47,7 @@ void draw_board(char board[][ROW_MAX +1], int current_player);
  *                   thier piece to the second time run.                *
  ************************************************************************/
 
- void get_coordinates(char board[][ROW_MAX + 1], bool run_before, int current_player, int *p_x, int *p_y);
+ void get_coordinates(char board[][ROW_MAX +1][MESSAGE], bool run_before, int current_player, int *p_x, int *p_y);
 
 /************************************************************************
  * off board: Checks if the co-ordinates entered are valid or off the   *
@@ -62,12 +63,12 @@ bool off_board(int x_coordinate, int y_coordinate);
  *                 false if there isn't.                                *
  ************************************************************************/
 
-bool validate_piece(char board[][ROW_MAX + 1], int current_player, int x_coordinate, int y_coordinate);
+bool validate_piece(char board[][ROW_MAX +1][MESSAGE], int current_player, int x_coordinate, int y_coordinate);
 
 /************************************************************************
  * valid square: Checks the co-ordinates to move the piece to is a valid*
  *               square ie isnt an illegal square or already occupied   *
  ************************************************************************/
 
-bool valid_square(char board[][ROW_MAX + 1], int x_coordinate, int y_coordinate);
+bool valid_square(char board[][ROW_MAX +1][MESSAGE], int x_coordinate, int y_coordinate);
 #endif // BOARD_H_INCLUDED
