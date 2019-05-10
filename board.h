@@ -9,9 +9,29 @@
 #define ROW_MAX 7
 #define COLUMN_MIN 0
 #define COLUMN_MAX 7
-#define MESSAGE 32
+#define MESSAGE 30
+#define ERROR_MESSAGE 38
+#define EMPTY_SQUARE " "
 #define INVALID_SQUARE "!"
 #define QUIT 9
+#define WHITE_PIECE "w"
+#define WHITE_KING "W"
+#define BLACK_PIECE "b"
+#define BLACK_KING "B"
+#define TAKEN_PIECE "t"
+//escape codes
+#define ESCAPE_CODE 30
+#define COLOUR_PIECE "\033[196;5;196m\033[38;5;196m"
+#define COLOUR_WHITE_PIECE "w\033[0m"
+#define COLOUR_WHITE_KING "W\033[0m"
+#define COLOUR_BLACK_PIECE "b\033[0m"
+#define COLOUR_BLACK_KING "B\033[0m"
+#define CLEAR_COLOUR "\033[0m"
+//phrases
+#define PHRASE1 "Please enter the x co-ordinate of the piece you wish to move (0-7) or 9 to surrender: "
+#define PHRASE2 "Please enter the y co-ordinate of the piece you wish to move (0-7): "
+#define PHRASE3 "Please enter the x co-ordinate of the place you wish to move to (0-7): "
+#define PHRASE4 "Please enter the y co-ordinate of the place you wish to move to (0-7): "
 
 enum player { PLAYER_WHITE = 0, PLAYER_BLACK = 1 };
 

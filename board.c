@@ -15,18 +15,16 @@ int initalize_game(char board[][ROW_MAX +1][MESSAGE], int current_player)
             if (y_coordinate < 3) // y_coordinate is less than 3 so dealing with white pieces
             {
                 strcpy(piece_colour, "w");
-                update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
             else if ((y_coordinate > 2) && (y_coordinate < 5))
             {
                 strcpy(piece_colour, " ");
-                update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
             else // y_coordinate is 5 or more so dealing with black pieces
             {
                 strcpy(piece_colour, "b");
-                update_board_array(board, piece_colour, x_coordinate, y_coordinate);
             }
+            update_board_array(board, piece_colour, x_coordinate, y_coordinate);
         }
     }
     return current_player;
@@ -54,7 +52,7 @@ void draw_board(char board[][ROW_MAX +1][MESSAGE], int current_player)
     int x_coordinate, y_coordinate;
     char temp_array[COLUMN_MAX + 1][ROW_MAX + 1][MESSAGE];
 
-    if (current_player == 1)
+    if (current_player == PLAYER_BLACK)
     {
         for (y_coordinate = ROW_MIN; y_coordinate <= ROW_MAX; y_coordinate++)
         {
@@ -129,41 +127,44 @@ bool off_board(int x_coordinate, int y_coordinate)
 
 bool valid_square(char board[][ROW_MAX +1][MESSAGE], int x_coordinate, int y_coordinate)
 {
-    return (board[x_coordinate][y_coordinate][MESSAGE] = ' ') ? true : false;
+    return (strcmp(board[x_coordinate][y_coordinate], EMPTY_SQUARE) == 0) ? true : false;
 }
 
 void get_coordinates(char board[][ROW_MAX +1][MESSAGE], bool run_before, int current_player, int *p_x, int *p_y)
 {
-    //int x_coordinate_of_piece, y_coordinate_of_piece, x_coordinate_to_move_to, y_coordinate_to_move_to;
     char starting_phrase[] = "Whites turn::";
+    char phrase1[] = PHRASE1, phrase2[] = PHRASE3;
 
     current_player ? strcpy(starting_phrase, "Blacks turn::") : strcpy(starting_phrase, "Whites turn::");
     if (run_before == false)
     {
-        printf("%s Please enter the x co-ordinate of the piece you wish to move (0-7) or 9 to surrender: ", starting_phrase);
+        strcpy(phrase1, PHRASE1);
+        strcpy(phrase2, PHRASE2);
+    }
+    else
+    {
+        strcpy(phrase1, PHRASE3);
+        strcpy(phrase2, PHRASE4);
+    }
+    while (1)
+    {
+        printf("%s %s", starting_phrase, phrase1);
         scanf(" %1d", &*p_x);
         if (*p_x == QUIT)
         {
             exit(0);
         }
-        printf("%s Please enter the y co-ordinate of the piece you wish to move (0-7): ", starting_phrase);
+        printf("%s %s", starting_phrase, phrase2);
         scanf(" %1d", &*p_y);
         if (current_player == PLAYER_BLACK)
         {
-            *p_x -= 7;
-            *p_y -= 7;
+            *p_x = 7 - *p_x;
+            *p_y = 7 - *p_y;
         }
-    }
-    else
-    {
-        printf("%s Please enter the x co-ordinate of the place you wish to move to (0-7): ", starting_phrase);
-        scanf(" %1d", &*p_x);
-        printf("%s Please enter the y co-ordinate of the place you wish to move to (0-7): ", starting_phrase);
-        scanf(" %1d", &*p_y);
-        if (current_player == PLAYER_BLACK)
+        if (off_board(*p_x, *p_y) == false)
         {
-            *p_x -= 7;
-            *p_y -= 7;
+            break;
         }
+        printf("Co-ordinates are off the board\n");
     }
 }
