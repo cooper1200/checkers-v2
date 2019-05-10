@@ -80,6 +80,7 @@ int main()
             p_make_king = current_player ? "B" : "W";
             update_board_array(board, p_make_king, x_coordinate_to_move_to, y_coordinate_to_move_to);
         }
+        count_pieces(board, &number_of_white_pieces_left, &number_of_black_pieces_left);
         if (number_of_white_pieces_left == 0 || number_of_black_pieces_left == 0)
         {
             game_over(current_player);
@@ -87,8 +88,6 @@ int main()
         current_player = next_player(current_player);
         clear_screen();
         draw_board(board, current_player);
-        count_pieces(board, &number_of_white_pieces_left, &number_of_black_pieces_left);
-
     }
     return 0;
 }
